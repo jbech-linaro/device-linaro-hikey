@@ -1,24 +1,25 @@
 #!/bin/bash
-if [ $# -eq 0 ]
-  then
-    echo "Provide the right /dev/ttyUSBX specific to recovery device"
-    exit
-fi
-
-if [ ! -e "${1}" ]
-  then
-    echo "device: ${1} does not exist"
-    exit
-fi
-DEVICE_PORT="${1}"
-PTABLE=ptable-aosp-8g.img
-if [ $# -gt 1 ]
-  then
-    if [ "${2}" == '4g' ]
-      then
-        PTABLE=ptable-aosp-4g.img
-    fi
-fi
+#if [ $# -eq 0 ]
+#  then
+#    echo "Provide the right /dev/ttyUSBX specific to recovery device"
+#    exit
+#fi
+#
+#if [ ! -e "${1}" ]
+#  then
+#    echo "device: ${1} does not exist"
+#    exit
+#fi
+#DEVICE_PORT="${1}"
+#PTABLE=ptable-aosp-8g.img
+#if [ $# -gt 1 ]
+#  then
+#    if [ "${2}" == '4g' ]
+#      then
+#        PTABLE=ptable-aosp-4g.img
+#    fi
+#fi
+PTABLE=ptable-aosp-4g.img
 
 INSTALLER_DIR="`dirname ${0}`"
 FIRMWARE_DIR="${INSTALLER_DIR}"
@@ -60,7 +61,7 @@ fi
 
 echo "android out dir:${OUT_IMGDIR}"
 
-sudo python "${INSTALLER_DIR}"/hisi-idt.py --img1="${FIRMWARE_DIR}"/l-loader.bin -d "${DEVICE_PORT}"
+#sudo python "${INSTALLER_DIR}"/hisi-idt.py --img1="${FIRMWARE_DIR}"/l-loader.bin -d "${DEVICE_PORT}"
 sleep 3
 # set a unique serial number
 serialno=`fastboot getvar serialno 2>&1 > /dev/null`
@@ -74,7 +75,8 @@ fi
 fastboot flash ptable "${INSTALLER_DIR}"/"${PTABLE}"
 fastboot flash fastboot "${FIRMWARE_DIR}"/fip.bin
 fastboot flash nvme "${INSTALLER_DIR}"/nvme.img
-fastboot flash boot "${OUT_IMGDIR}"/boot.img
-fastboot flash system "${OUT_IMGDIR}"/system.img
+#fastboot flash boot "${OUT_IMGDIR}"/boot.img
+fastboot flash boot $ANDROID_PRODUCT_OUT/boot_fat.uefi.img
+#fastboot flash system "${OUT_IMGDIR}"/system.img
 fastboot flash cache "${OUT_IMGDIR}"/cache.img
 fastboot flash userdata "${OUT_IMGDIR}"/userdata.img
