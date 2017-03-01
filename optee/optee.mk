@@ -10,6 +10,9 @@ BUILD_OPTEE_MK 		:= $(OPTEE_OS_DIR)/mk/aosp_optee.mk
 # The Makefiles etc used to build Trusted Applications
 TA_DEV_KIT_DIR 		:= optee/optee_os/out/arm-plat-hikey/export-ta_arm64
 
+# Init files related to OP-TEE
+PRODUCT_COPY_FILES	+= device/linaro/hikey/optee/init.optee.rc:root/init.hikey.optee.rc
+
 # OP-TEE Normal World components
 PRODUCT_PACKAGES += libteec \
 	tee-supplicant \
