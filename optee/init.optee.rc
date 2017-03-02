@@ -1,4 +1,10 @@
 on post-fs
-    mkdir /data/tee 0777 shell shell
-    mkdir /data/tee/optee_armtz 0777 shell shell
+    mkdir /data/tee 0775 shell shell
+    mkdir /data/tee/optee_armtz 0775 shell shell
     restorecon_recursive /data/tee
+
+service tee_supplicant /system/bin/tee-supplicant
+    class main
+    user shell
+    group shell
+    oneshot
